@@ -1,6 +1,7 @@
 
 const GameBoard = (function() {
-    const gameBoard = [];
+    const board = [];
+    
     return { gameBoard };
 })();
 
@@ -8,8 +9,7 @@ const displayControl = (function() {
     
 })();
 
-function createPlayer(name) {
-    const Username = name;
-    return { Username };
+function createPlayer(name, mark, turn, type) {
+    return { name, mark, turn, type};
 }
 
