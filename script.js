@@ -44,7 +44,7 @@ const GameBoard = (function() {
 
 const GameController = (function() {
 
-    const playerOne = createPlayer('Player One', 'X', true, '');
+    const playerOne = createPlayer('Player One', 'X', true, '');// Create two players
     const playerTwo = createPlayer('Player Two', 'O', false, '');
 
     console.log(playerOne);
@@ -57,9 +57,13 @@ const GameController = (function() {
     const playRound = () => {
         if(playerOne.turn === true) {
             console.log('Player One turn');
+            GameBoard.dropMark(1,1, playerOne.mark);
+            GameBoard.printBoard();
             switchTurn();
         } else {
             console.log('Player Two turn');
+            GameBoard.dropMark(1,2, playerTwo.mark);
+            GameBoard.printBoard();
             switchTurn();
         }
     }
