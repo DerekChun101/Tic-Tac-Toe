@@ -1,25 +1,24 @@
 
 const GameBoard = (function() {
+
     const board = [];
     const rows = 3;
     const columns = 3;
 
-    const playerOne = createPlayer('Player One', 'X', 1, 'player');
-    const playerTwo = createPlayer('Player Two', 'O', 2, 'player');
-    console.log(playerOne);
-    console.log(playerTwo);
+    
 
-    for(let i = 0; i < rows; i++) {
+
+    for(let i = 0; i < rows; i++) { //creates a 2d array
         board[i] = [];
         for(let j = 0; j < columns; j++) {
-            board[i].push(Cell());
+            board[i].push(Cell()); //pushs a cell object with own functions
         }
     };
     
     const getBoard = () => board;
 
     const dropMark = (column, row, player) => {
-        if(board[row][column].getValue() === 0) {
+        if(board[row][column].getValue() === 0) { //get value of cell
             board[row][column].addMark(player)
         } else {
             return;
@@ -43,8 +42,42 @@ const GameBoard = (function() {
 
 })();
 
-const displayControl = (function() {
-    
+const GameController = (function() {
+
+    const playerOne = createPlayer('Player One', 'X', true, '');
+    const playerTwo = createPlayer('Player Two', 'O', false, '');
+
+    console.log(playerOne);
+    console.log(playerTwo);
+
+    const startGame = () => {
+        GameBoard.printBoard();
+    }
+
+    const playRound = () => {
+        if(playerOne.turn === true) {
+            console.log('Player One turn');
+            switchTurn();
+        } else {
+            console.log('Player Two turn');
+            switchTurn();
+        }
+    }
+
+    const switchTurn = () => {
+        if(playerOne.turn === true) {
+            playerOne.turn = false;
+            playerTwo.turn = true;
+        } else {
+            playerOne.turn = true;
+            playerTwo.turn = false;
+        }
+    }
+    return {
+        startGame,
+        switchTurn,
+        playRound
+    };
 })();
 
 function Cell() {
@@ -63,8 +96,9 @@ function Cell() {
 function createPlayer(name, mark, turn, type) {
     return { name, mark, turn, type};
 }
-GameBoard.dropMark(1,1, 1);
-GameBoard.dropMark(0,0,1);
-GameBoard.dropMark(0,0,2);
-GameBoard.dropMark(0,1,2);
-GameBoard.printBoard();
+
+
+GameController.startGame();
+GameController.playRound();
+GameController.playRound();
+GameController.playRound();
