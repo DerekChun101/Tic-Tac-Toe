@@ -19,18 +19,30 @@ function GameBoard() {
         if(board[row][column] === '') {
             board[row][column] = playerMark;
         } else return;
-    }
+    };
 
     const printBoard = () => {
         console.log(board);
-    }
+    };
+
+    const winConditions = [
+        [0, 1, 2],
+        [3 ,4, 5],
+        [6, 7, 8],  
+        [0, 3, 6],
+        [1, 4, 7],
+		[2, 5, 8],
+		[0, 4, 8],
+		[2, 4, 6],
+    ];
+
 
 
     return {
         getBoard,
         printBoard,
         placeMark
-    }
+    };
 }
 
 function GameController() {
@@ -43,13 +55,16 @@ function GameController() {
     let turn = 1;
     const playRound = () => {
         if(turn === 1){
-            board.placeMark(1,1, players[0].mark);
+            board.placeMark(0,0, players[0].mark);
+            board.placeMark(0,1, players[0].mark);
+            board.placeMark(0,2, players[0].mark);
         } else {
             board.placeMark(1,2,players[1].mark);
         }
         switchTurn();
         board.printBoard();
-    }
+        checkWin();
+    };
 
     const switchTurn = () => {
         if(turn === 1){
@@ -57,7 +72,16 @@ function GameController() {
         } else {
             turn = 1;
         }
+    };
+    boardValue = board.getBoard();
+    
+    const checkWin = () => {
+        if(boardValue[0][0] === "X" &&
+        boardValue[0][1] === "X" &&
+        boardValue[0][2] === "X"
+      ) { console.log('win')};
     }
+
     return { playRound, switchTurn}
 }
 
