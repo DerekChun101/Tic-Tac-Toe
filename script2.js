@@ -78,6 +78,7 @@ const GameBoard = (() => {
         updateBoard,
         clearBoard
     };
+    
 })();
 
 const GameController = (() => {
