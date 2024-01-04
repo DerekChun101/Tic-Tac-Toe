@@ -7,7 +7,6 @@ const GameBoard = (function() {
 
     
 
-
     for(let i = 0; i < rows; i++) { //creates a 2d array
         board[i] = [];
         for(let j = 0; j < columns; j++) {
