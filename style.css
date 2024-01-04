@@ -1,0 +1,9 @@
+.square {
+    border: 1px solid black;
+    height: 30px;
+    width: 30px;
+}
+.GameBoard {
+    display: grid;
+    grid-template-columns: 30px 30px 30px;
+}
