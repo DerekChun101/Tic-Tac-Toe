@@ -1,16 +1,26 @@
 const DOM = (() => {
+    
 
     const startBtn = document.querySelector('#startBtn');
     startBtn.addEventListener('click', () => {
-    GameController.startGame();
+        GameController.startGame();
     });
 
+    const restartBtn = document.querySelector('#restartBtn');
+    restartBtn.addEventListener('click', () => {
+    
+        GameBoard.clearBoard();
+        GameController.restartGame();
+        
+    })
     const addSqaures = () => {
         const sqaures =  document.querySelectorAll('.square');
         sqaures.forEach(sqaure => {
-            sqaure.addEventListener('click', GameBoard.placeMark);
+            sqaure.addEventListener('click', GameController.placeMark);
         })
     }
+
+
 
     return{addSqaures};
 })();
@@ -20,24 +30,34 @@ const DOM = (() => {
 
 const GameBoard = (() => {
 
-    const board = ['','','','','','','','',''];
+    let board = ['','','','','','','','',''];
   
 
     const getBoard = () => board;
 
-    const placeMark = (event) => {
-        console.log(event.target.id);
-    };
-
+    const clearBoard = () => {
+        board = ['','','','','','','','',''];
+        printBoard();
+        
+    }
+   
     const printBoard = () => {
         let boardHTML = '';
         board.forEach((sqaure, index) => {
-            boardHTML += `<div class="square" id = "square${index}">${sqaure}</div>`
+            boardHTML += `<div class="square" id = "square-${index}">${sqaure}</div>`
             
         });
+        
         document.querySelector('.GameBoard').innerHTML = boardHTML;
         DOM.addSqaures();
+        
     };
+
+
+    const updateBoard = (index, mark) => {
+        board[index] = mark;
+       
+    }
 
     const winConditions = [
         [0, 1, 2],
@@ -55,53 +75,64 @@ const GameBoard = (() => {
     return {
         getBoard,
         printBoard,
-        placeMark
+        updateBoard,
+        clearBoard
     };
 })();
 
 const GameController = (() => {
     let gameOver;
-    
-    let turn = 1;
+    let players = []
+    let turn = 0;
     const startGame = () => {
 
         const playerOne = createPlayer(document.querySelector('#player1').value, 'X', '');
         const playerTwo = createPlayer(document.querySelector('#player2').value, 'O', '');
-        const players = [playerOne, playerTwo];
+        players = [playerOne, playerTwo];
+        console.log(`${players[turn].name}'s turn!`);
         let gameOver = false;
+
         GameBoard.printBoard();
+        
 
     }
-
+    const restartGame = () => {
+        turn = 0;
+        gameOver = false;
+    }
     const playRound = () => {
-        if(turn === 1){
-           
-        } else {
-
-        }
+        
         switchTurn();
         GameBoard.printBoard();
         checkWin();
     };
 
+    const placeMark = (event) => {
+        
+        let index = parseInt(event.target.id.split('-')[1]);
+        GameBoard.updateBoard(index, players[turn].mark);
+        playRound();
+        console.log(`${players[turn].name}'s turn!`);
+    };
+
     const switchTurn = () => {
-        if(turn === 1){
-            turn = 2;
-        } else {
+        if(turn === 0){
             turn = 1;
+        } else {
+            turn = 0;
         }
     };
 
-    boardValue = GameBoard.getBoard();
+    
     
     const checkWin = () => {
     
     }
 
-    return { playRound, switchTurn, startGame}
+    return { playRound, switchTurn, startGame, restartGame, placeMark}
 })();
 
-function createPlayer(name, mark, type) {
+function createPlayer(name, mark, type) { //Factory function to create player
     return {name, mark, type};
 }
 
