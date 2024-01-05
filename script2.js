@@ -115,7 +115,7 @@ const GameController = (() => {
         startGame();
     }
 
-    const playRound = () => {
+    const playRound = () => { //after each placment checks the state of the board.
         if(checkWin(boardValue)) {
             gameOver = true;
             DOM.getResult(players[turn].name);
