@@ -85,6 +85,8 @@ const GameController = (() => {
     let gameOver;
     let players = []
     let turn = 0;
+    let boardValue = GameBoard.getBoard();
+    
     const startGame = () => {
 
         const playerOne = createPlayer(document.querySelector('#player1').value, 'X', '');
@@ -100,19 +102,23 @@ const GameController = (() => {
     const restartGame = () => {
         turn = 0;
         gameOver = false;
+        boardValue = GameBoard.getBoard();
     }
     const playRound = () => {
-        
         switchTurn();
         GameBoard.printBoard();
         checkWin();
     };
 
     const placeMark = (event) => {
-        
+
         let index = parseInt(event.target.id.split('-')[1]);
-        GameBoard.updateBoard(index, players[turn].mark);
-        playRound();
+        if(boardValue[index] === '') { //checks to see if square is empty before placing mark
+            GameBoard.updateBoard(index, players[turn].mark);
+            boardValue = GameBoard.getBoard();
+            console.log(boardValue);
+            playRound();
+        }
         console.log(`${players[turn].name}'s turn!`);
     };
 
