@@ -59,17 +59,6 @@ const GameBoard = (() => {
        
     }
 
-    const winConditions = [
-        [0, 1, 2],
-        [3 ,4, 5],
-        [6, 7, 8],  
-        [0, 3, 6],
-        [1, 4, 7],
-		[2, 5, 8],
-		[0, 4, 8],
-		[2, 4, 6],
-    ];
-
 
 
     return {
@@ -88,7 +77,8 @@ const GameController = (() => {
     let boardValue = GameBoard.getBoard();
     
     const startGame = () => {
-
+        GameBoard.clearBoard();
+        restartGame();
         const playerOne = createPlayer(document.querySelector('#player1').value, 'X', '');
         const playerTwo = createPlayer(document.querySelector('#player2').value, 'O', '');
         players = [playerOne, playerTwo];
@@ -105,21 +95,29 @@ const GameController = (() => {
         boardValue = GameBoard.getBoard();
     }
     const playRound = () => {
+        if(checkWin(boardValue)) {
+            gameOver = true;
+            console.log(`${players[turn].name} win`)
+            GameBoard.printBoard();
+            startGame();
+            return;
+        };
+        
         switchTurn();
         GameBoard.printBoard();
-        checkWin();
+        
     };
 
     const placeMark = (event) => {
-
+        
         let index = parseInt(event.target.id.split('-')[1]);
         if(boardValue[index] === '') { //checks to see if square is empty before placing mark
             GameBoard.updateBoard(index, players[turn].mark);
             boardValue = GameBoard.getBoard();
             console.log(boardValue);
             playRound();
-        }
-        console.log(`${players[turn].name}'s turn!`);
+        } else return;
+        
     };
 
     const switchTurn = () => {
@@ -128,12 +126,29 @@ const GameController = (() => {
         } else {
             turn = 0;
         }
+        console.log(`${players[turn].name}'s turn!`);
     };
 
     
     
-    const checkWin = () => {
-    
+    const checkWin = (board) => {
+        const winConditions = [
+            [0, 1, 2],
+            [3 ,4, 5],
+            [6, 7, 8],  
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
+        ];
+        for(let i = 0; i< winConditions.length; i++){
+            const[a, b, c] = winConditions[i];
+            if(board[a] && board[a] === board[b] && board[c]) {
+                return true;
+            }
+        };
+        return false;   
     }
 
     return { playRound, switchTurn, startGame, restartGame, placeMark}
