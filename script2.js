@@ -4,6 +4,7 @@ const DOM = (() => {
     const startBtn = document.querySelector('#startBtn');
     startBtn.addEventListener('click', () => {
         GameController.startGame();
+        
     });
 
     const restartBtn = document.querySelector('#restartBtn');
@@ -13,6 +14,15 @@ const DOM = (() => {
         GameController.restartGame();
         
     })
+    const resultMsg = document.querySelector('.result');
+
+    const resetDOM = () => {
+        resultMsg.innerHTML = '';
+    }
+    
+    const getResult = (name) => {
+        resultMsg.innerHTML = `${name} wins!`;
+    }
     const addSqaures = () => {
         const sqaures =  document.querySelectorAll('.square');
         sqaures.forEach(sqaure => {
@@ -22,7 +32,7 @@ const DOM = (() => {
 
 
 
-    return{addSqaures};
+    return{addSqaures, getResult, resetDOM};
 })();
 
 
@@ -77,13 +87,15 @@ const GameController = (() => {
     let boardValue = GameBoard.getBoard();
     
     const startGame = () => {
+
         GameBoard.clearBoard();
         restartGame();
+        DOM.resetDOM();
         const playerOne = createPlayer(document.querySelector('#player1').value, 'X', '');
         const playerTwo = createPlayer(document.querySelector('#player2').value, 'O', '');
         players = [playerOne, playerTwo];
         console.log(`${players[turn].name}'s turn!`);
-        let gameOver = false;
+        gameOver = false;
 
         GameBoard.printBoard();
         
@@ -93,16 +105,20 @@ const GameController = (() => {
         turn = 0;
         gameOver = false;
         boardValue = GameBoard.getBoard();
+        DOM.resetDOM();
     }
     const playRound = () => {
         if(checkWin(boardValue)) {
             gameOver = true;
-            console.log(`${players[turn].name} win`)
+            DOM.getResult(players[turn].name);
             GameBoard.printBoard();
-            startGame();
+            return;
+        } else if(checkTie(boardValue)){
+            gameOver = true;
+            console.log('tie');
+            GameBoard.printBoard();
             return;
         };
-        
         switchTurn();
         GameBoard.printBoard();
         
@@ -111,6 +127,9 @@ const GameController = (() => {
     const placeMark = (event) => {
         
         let index = parseInt(event.target.id.split('-')[1]);
+        if(gameOver) { //Prevents placing more markers when the game is over
+            return;
+        }
         if(boardValue[index] === '') { //checks to see if square is empty before placing mark
             GameBoard.updateBoard(index, players[turn].mark);
             boardValue = GameBoard.getBoard();
@@ -130,7 +149,9 @@ const GameController = (() => {
     };
 
     
-    
+    const checkTie = (board) => {
+        return board.every(cell => cell !=='');
+    }
     const checkWin = (board) => {
         const winConditions = [
             [0, 1, 2],
@@ -142,12 +163,13 @@ const GameController = (() => {
             [0, 4, 8],
             [2, 4, 6],
         ];
+
         for(let i = 0; i< winConditions.length; i++){
             const[a, b, c] = winConditions[i];
-            if(board[a] && board[a] === board[b] && board[c]) {
+            if(board[a] && board[a] === board[b] && board[a] === board[c]) {
                 return true;
             }
-        };
+        }
         return false;   
     }
 
