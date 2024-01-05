@@ -21,7 +21,12 @@ const DOM = (() => {
     }
     
     const getResult = (name) => {
-        resultMsg.innerHTML = `${name} wins!`;
+        if(name === 'tie') {
+            resultMsg.innerHTML = 'TIE';
+        } else {
+            resultMsg.innerHTML = `${name} wins!`;
+        }
+
     }
     const addSqaures = () => {
         const sqaures =  document.querySelectorAll('.square');
@@ -47,9 +52,7 @@ const GameBoard = (() => {
 
     const clearBoard = () => {
         board = ['','','','','','','','',''];
-        printBoard();
-        
-    }
+    };
    
     const printBoard = () => {
         let boardHTML = '';
@@ -84,16 +87,20 @@ const GameController = (() => {
     let gameOver;
     let players = []
     let turn = 0;
-    let boardValue = GameBoard.getBoard();
-    
+    let boardValue;
     const startGame = () => {
+        if (gameOver === false) { //Prevents repressing start button when game is not over
+            return;
+        };
 
-        GameBoard.clearBoard();
-        restartGame();
+        GameBoard.clearBoard(); //When game starts clear the board
+        boardValue = GameBoard.getBoard();
         DOM.resetDOM();
+
         const playerOne = createPlayer(document.querySelector('#player1').value, 'X', '');
         const playerTwo = createPlayer(document.querySelector('#player2').value, 'O', '');
         players = [playerOne, playerTwo];
+        
         console.log(`${players[turn].name}'s turn!`);
         gameOver = false;
 
@@ -103,9 +110,10 @@ const GameController = (() => {
     }
     const restartGame = () => {
         turn = 0;
-        gameOver = false;
+        gameOver = true;
         boardValue = GameBoard.getBoard();
         DOM.resetDOM();
+        startGame();
     }
     const playRound = () => {
         if(checkWin(boardValue)) {
@@ -115,7 +123,7 @@ const GameController = (() => {
             return;
         } else if(checkTie(boardValue)){
             gameOver = true;
-            console.log('tie');
+            DOM.getResult('tie');
             GameBoard.printBoard();
             return;
         };
