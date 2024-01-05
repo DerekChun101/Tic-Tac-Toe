@@ -20,7 +20,7 @@ const DOM = (() => {
         resultMsg.innerHTML = '';
     }
     
-    const getResult = (name) => {
+    const getResult = (name) => { //Display result msg
         if(name === 'tie') {
             resultMsg.innerHTML = 'TIE';
         } else {
@@ -28,7 +28,7 @@ const DOM = (() => {
         }
 
     }
-    const addSqaures = () => {
+    const addSqaures = () => { //Give sqaures event listeners
         const sqaures =  document.querySelectorAll('.square');
         sqaures.forEach(sqaure => {
             sqaure.addEventListener('click', GameController.placeMark);
@@ -46,9 +46,8 @@ const DOM = (() => {
 const GameBoard = (() => {
 
     let board = ['','','','','','','','',''];
-  
 
-    const getBoard = () => board;
+    const getBoard = () => board; //get board value
 
     const clearBoard = () => {
         board = ['','','','','','','','',''];
@@ -69,7 +68,6 @@ const GameBoard = (() => {
 
     const updateBoard = (index, mark) => {
         board[index] = mark;
-       
     }
 
 
@@ -86,8 +84,9 @@ const GameBoard = (() => {
 const GameController = (() => {
     let gameOver;
     let players = []
-    let turn = 0;
+    let turn = 0; //determines whose turn it is
     let boardValue;
+
     const startGame = () => {
         if (gameOver === false) { //Prevents repressing start button when game is not over
             return;
@@ -97,10 +96,10 @@ const GameController = (() => {
         boardValue = GameBoard.getBoard();
         DOM.resetDOM();
 
-        const playerOne = createPlayer(document.querySelector('#player1').value, 'X', '');
+        const playerOne = createPlayer(document.querySelector('#player1').value, 'X', ''); //Creates two players using and place into array
         const playerTwo = createPlayer(document.querySelector('#player2').value, 'O', '');
         players = [playerOne, playerTwo];
-        
+
         console.log(`${players[turn].name}'s turn!`);
         gameOver = false;
 
@@ -108,13 +107,14 @@ const GameController = (() => {
         
 
     }
-    const restartGame = () => {
+    const restartGame = () => { //reset game
         turn = 0;
         gameOver = true;
         boardValue = GameBoard.getBoard();
         DOM.resetDOM();
         startGame();
     }
+
     const playRound = () => {
         if(checkWin(boardValue)) {
             gameOver = true;
@@ -174,7 +174,7 @@ const GameController = (() => {
 
         for(let i = 0; i< winConditions.length; i++){
             const[a, b, c] = winConditions[i];
-            if(board[a] && board[a] === board[b] && board[a] === board[c]) {
+            if(board[a] && board[a] === board[b] && board[a] === board[c]) { //checks if board matches win condition
                 return true;
             }
         }
