@@ -86,6 +86,8 @@ const GameController = (() => {
     let players = []
     let turn = 0; //determines whose turn it is
     let boardValue;
+    const playerOneInput =  document.querySelector('#player1');
+    const playerTwoInput =  document.querySelector('#player2');
 
     const startGame = () => {
         if (gameOver === false) { //Prevents repressing start button when game is not over
@@ -96,9 +98,16 @@ const GameController = (() => {
         boardValue = GameBoard.getBoard();
         DOM.resetDOM();
 
-        const playerOne = createPlayer(document.querySelector('#player1').value, 'X', ''); //Creates two players using and place into array
-        const playerTwo = createPlayer(document.querySelector('#player2').value, 'O', '');
-        players = [playerOne, playerTwo];
+       
+        if(playerOneInput.value === '' || playerTwoInput.value === '')  {
+            alert('Please enter names');
+            return;
+        } else  {
+            const playerOne = createPlayer(document.querySelector('#player1').value, 'X', ''); //Creates two players using and place into array
+            const playerTwo = createPlayer(document.querySelector('#player2').value, 'O', '');
+            players = [playerOne, playerTwo];
+        }
+        
 
         console.log(`${players[turn].name}'s turn!`);
         gameOver = false;
@@ -109,6 +118,7 @@ const GameController = (() => {
     }
     const restartGame = () => { //reset game
         turn = 0;
+       
         gameOver = true;
         boardValue = GameBoard.getBoard();
         DOM.resetDOM();
