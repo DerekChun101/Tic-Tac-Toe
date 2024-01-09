@@ -1,14 +1,25 @@
+body {
+    background-color: rgb(200, 204, 207);
+}
+.title {
+    font-weight: bold;
+    font-size: 100px;
+}
+
 .square {
 
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid black;
+    border: 1px solid rgb(194, 49, 58);
+    background-color: rgb(143,156,139);
     height: 100px;
     width: 100px;
     font-size: 100px;
     
 }
+
+
 .GameBoard {
     display: grid;
     grid-template-columns:repeat(3, 100px);
@@ -18,4 +29,31 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+.playerInputs {
+    display: flex;
+    gap: 5vw;
+    margin-bottom: 3vh;
+    
+}
+.playerInputs > input {
+    font-size: 20px;
+}
+.btnContainer { 
+    display: flex;
+    gap: 5vw;
+}
+.btnContainer > button {
+    height: 50px;
+    width: 100px;
+    background-color: rgb(194, 49, 58);
+    border: none;
+    border-radius: 100px;
+    color: rgb(200, 204, 207);
+    font-size: 20px;
+}
+
+.result {
+    margin-top: 3vh;
+    font-size: 40px;
 }
